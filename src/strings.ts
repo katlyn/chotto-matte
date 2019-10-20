@@ -22,7 +22,11 @@ export const strings = {
   reset: {
     confirm: 'Are you sure you want to reset all codes? This can\'t be undone. Use `!code reset yes` to confirm.',
     pending: 'Resetting all codes...',
-    success: 'All codes have been reset.'
+    success: 'All codes have been reset.',
+    mentions: {
+      pending: 'Resetting codes for mentioned users...',
+      success: 'All codes for $m have been reset.'
+    }
   },
   help: {
     codes: {

@@ -29,7 +29,7 @@ export const set = async (msg: Message, args: string[]) => {
     return msg.channel.createMessage(strings.setCode.missingArgs)
   } else if (!Number(args[0])) {
     return msg.channel.createMessage(strings.setCode.isNaN)
-  } else if (args[0].length > 4) {
+  } else if (args[0].length > 10) {
     return msg.channel.createMessage(strings.setCode.incorrectFormat)
   } else {
     const reply = await msg.channel.createMessage(strings.setCode.storing)
@@ -71,7 +71,15 @@ export const remove = async (msg: Message, args: string[]) => {
 }
 
 export const reset = async (msg: Message, args: string[]) => {
-  if (args[0] && args[0] === 'yes') {
+  if (msg.mentions.length > 0) {
+    const reply = await msg.channel.createMessage(strings.reset.mentions.pending)
+    const reset: string[] = []
+    for (let m in msg.mentions) {
+      await r.table('user_codes').get(msg.mentions[m].id).delete().run()
+      reset.push(msg.mentions[m].mention)
+    }
+    return reply.edit(strings.reset.mentions.success.replace('$m', reset.join(', ')))
+  } else if (args[0] && args[0] === 'yes') {
     const reply = await msg.channel.createMessage(strings.reset.pending)
     await r.table('user_codes').delete().run()
     return reply.edit(strings.reset.success)
