@@ -8,7 +8,7 @@ export interface UserCodes {
 }
 
 export const r = rethinkDBDash({
-  host: '172.20.0.2',
+  host: 'rethink',
   db: 'chotto_matte',
   optionalRun: false,
   cursor: false
