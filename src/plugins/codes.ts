@@ -1,5 +1,5 @@
-import { Message } from 'eris'
-import { ArrayResult } from 'rethinkdb'
+import { Client, Message } from 'eris'
+import { ArrayResult, CursorResult } from 'rethinkdb'
 import { r, UserCodes as UserCode } from '../pool'
 import { strings } from '../strings'
 
@@ -32,7 +32,7 @@ export const set = async (msg: Message, args: string[]) => {
   } else if (args[0].length > 10) {
     return msg.channel.createMessage(strings.setCode.incorrectFormat)
   } else {
-    const reply = await msg.channel.createMessage(strings.setCode.storing)
+    // const reply = await msg.channel.createMessage(strings.setCode.storing)
     try {
       r.table('user_codes').insert({
         id: msg.author.id,
@@ -41,9 +41,10 @@ export const set = async (msg: Message, args: string[]) => {
         conflict: 'update'
       }).run()
     } catch (err) {
-      return reply.edit(strings.setCode.error)
+      return msg.channel.createMessage(strings.setCode.error)
     }
-    return reply.edit(strings.setCode.success.replace('$c', args[0]))
+    // return reply.edit(strings.setCode.success.replace('$c', args[0]))
+    await msg.addReaction(':hahaa:503098345116532741')
   }
 }
 
@@ -86,4 +87,29 @@ export const reset = async (msg: Message, args: string[]) => {
   } else {
     return msg.channel.createMessage(strings.reset.confirm)
   }
+}
+
+export const count = async (msg: Message, args: string[]) => {
+  const count = await r.table('user_codes').count().run()
+  return msg.channel.createMessage(strings.count.msg.replace('$c', count.toString()))
+}
+
+export const changefeed = async (bot: Client) => {
+  await r.table('user_codes').wait().run()
+  r.table('user_codes').changes().run(((err: any, cursor: CursorResult<UserCode>) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    cursor.on('data', async () => {
+      const count = await r.table('user_codes').count().run()
+      bot.editStatus('online', {
+        name: `${count} codes!`
+      })
+    })
+  }) as any)
+  const count = await r.table('user_codes').count().run()
+  bot.editStatus('online', {
+    name: `${count} codes!`
+  })
 }

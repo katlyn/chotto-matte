@@ -48,6 +48,13 @@ codeCommand.registerSubcommand('reset', codes.reset, {
   description: strings.help.reset.quick,
   fullDescription: strings.help.reset.full
 })
+codeCommand.registerSubcommand('count', codes.count, {
+  description: strings.help.count.quick,
+  fullDescription: strings.help.count.full
+})
+
+codes.changefeed(bot)
+  .catch(console.error)
 
 bot.on('ready', () => {
   console.log(`Ready! Connected to Discord as ${bot.user.username}#${bot.user.discriminator}.`)

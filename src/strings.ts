@@ -28,6 +28,9 @@ export const strings = {
       success: 'All codes for $m have been reset.'
     }
   },
+  count: {
+    msg: '$c users have a code set.'
+  },
   help: {
     codes: {
       quick: 'Management of user codes.',
@@ -48,6 +51,10 @@ export const strings = {
     reset: {
       quick: 'Resets all codes in the database.',
       full: 'Resets all codes in the database. This action cannot be undone.'
+    },
+    count: {
+      quick: 'Give a count of all codes in the database',
+      full: 'Give a count of all codes in the database'
     }
   },
   permissionDenied: 'Sorry, but you don\'t have permission to run this command!',
