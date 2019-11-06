@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    build: .
+    restart: always
+    environment:
+      - TOKEN=
+      - ADMIN_ROLES=
+  rethink:
+    image: rethinkdb:2.3.6

@@ -5,13 +5,11 @@ import { CommandClient, Message } from 'eris'
 import * as codes from './plugins/codes'
 import { strings } from './strings'
 
-const config = require('../config.json')
-
-if (!(config.token || config.token.length !== 0)) {
+if (!(process.env.TOKEN || process.env.TOKEN.length !== 0)) {
   throw new Error('No token specified!')
 }
 
-const bot = new CommandClient(config.token, {
+const bot = new CommandClient(process.env.TOKEN, {
   defaultImageFormat: 'png'
 }, {
   defaultHelpCommand: true,
@@ -43,7 +41,7 @@ codeCommand.registerSubcommand('remove', codes.remove, {
 })
 codeCommand.registerSubcommand('reset', codes.reset, {
   requirements: {
-    roleIDs: config.adminRoles
+    roleIDs: process.env.ADMIN_ROLES.split(',')
   },
   description: strings.help.reset.quick,
   fullDescription: strings.help.reset.full
